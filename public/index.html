@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clínica Odontológica - Front de Estudos</title>
+  <!-- Materialize CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+  <link href="./css/styles.css" rel="stylesheet">
+</head>
+<body class="grey lighten-5">
+
+  <nav class="teal">
+    <div class="nav-wrapper container">
+      <a href="#" class="brand-logo">Clínica</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/api-docs" target="_blank">Swagger</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="section">
+      <h5>Agendar Consulta</h5>
+
+      <div id="statusArea" class="card-panel grey lighten-4">
+        <span>Última resposta da API: <span id="statusChip" class="chip">—</span></span>
+        <span id="statusMsg" class="grey-text text-darken-1"></span>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <select id="pacienteSelect">
+            <option value="" disabled selected>Carregando pacientes...</option>
+          </select>
+          <label>Paciente</label>
+        </div>
+
+        <div class="input-field col s12 m6">
+          <select id="profissionalSelect">
+            <option value="" disabled selected>Carregando profissionais...</option>
+          </select>
+          <label>Profissional</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <input id="dataInput" type="date" />
+          <label class="active" for="dataInput">Data</label>
+        </div>
+        <div class="input-field col s12 m6">
+          <select id="horarioSelect">
+            <option value="" disabled selected>Escolha um profissional e uma data</option>
+          </select>
+          <label>Horário</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12 m6">
+          <input id="tipoConsultaInput" type="text" placeholder="Ex: Limpeza, Avaliação"/>
+          <label class="active" for="tipoConsultaInput">Tipo de consulta</label>
+        </div>
+        <div class="input-field col s12 m6">
+          <input id="obsInput" type="text" placeholder="Observações (opcional)"/>
+          <label class="active" for="obsInput">Observações</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12 right-align">
+          <button id="btnAgendar" class="btn waves-effect waves-light teal">Agendar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h5>Consultas</h5>
+      <table class="striped responsive-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Paciente</th>
+            <th>Profissional</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Tipo</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="consultasTbody">
+          <tr><td colspan="7" class="center-align grey-text">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+        <div class="col s12">
+          <p class="white-text">Frontend de estudos | Porta 3001 | <a class="yellow-text text-lighten-3" href="/api-docs" target="_blank">Swagger</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

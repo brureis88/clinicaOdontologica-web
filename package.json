@@ -1,0 +1,17 @@
+{
+  "name": "clinica-odontologica-web",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Frontend de estudos para a API Clínica Odontológica (porta 3000). Servidor Express na porta 3001 com proxy.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
