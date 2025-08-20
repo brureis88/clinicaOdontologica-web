@@ -14,6 +14,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Carregar consultas
   listarConsultas();
+
+  // Listener do submit do modal de edição
+  const formEditar = document.getElementById('formEditarConsulta');
+  if (formEditar) {
+    formEditar.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('editConsultaId').value;
+      const data = document.getElementById('editData').value;
+      const horario = document.getElementById('editHorarioSelect').value;
+      const tipoConsulta = document.getElementById('editTipoConsulta').value;
+      const observacoes = document.getElementById('editObs').value;
+      try {
+        const res = await fetch(`/api/consultas/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data, horario, tipoConsulta, observacoes })
+        });
+        const json = await res.json();
+        setStatus(res.status, json.message || res.statusText);
+        listarConsultas();
+        const modal = M.Modal.getInstance(document.getElementById('modalEditarConsulta'));
+        modal.close();
+      } catch (err) {
+        setStatus(0, 'Falha ao editar consulta');
+        console.error(err);
+      }
+    });
+  }
 });
 
 function setStatus(status, message) {
@@ -155,9 +183,99 @@ async function listarConsultas() {
         <td>${c.horario}</td>
         <td>${c.tipoConsulta}</td>
         <td>${c.status}</td>
+        <td style="text-align:right">
+          <button class="btn-flat btn-small edit-consulta teal-text text-darken-2" style="font-weight:bold;" title="Editar" data-id="${c.id}">Editar</button>
+          <button class="btn-flat btn-small cancel-consulta red-text" style="font-weight:bold;" title="Cancelar" data-id="${c.id}">Cancelar</button>
+        </td>
       `;
       tbody.appendChild(tr);
     });
+    // Eventos dos ícones
+    tbody.querySelectorAll('.edit-consulta').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        abrirModalEditarConsulta(el.dataset.id);
+      });
+    });
+    tbody.querySelectorAll('.cancel-consulta').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        cancelarConsulta(el.dataset.id);
+      });
+    });
+// Função para abrir modal de edição
+async function abrirModalEditarConsulta(id) {
+  try {
+    const res = await fetch(`/api/consultas/${id}`);
+    const json = await res.json();
+    const c = json.data || json;
+    document.getElementById('editConsultaId').value = c.id;
+    document.getElementById('editData').value = c.data;
+    document.getElementById('editTipoConsulta').value = c.tipoConsulta;
+    document.getElementById('editObs').value = c.observacoes;
+    // Preencher profissional (desabilitado)
+    const profSel = document.getElementById('editProfissionalSelect');
+    profSel.innerHTML = `<option value="${c.profissional.id}" selected>${c.profissional.nome} (${c.profissional.especialidade})</option>`;
+    profSel.value = c.profissional.id;
+    M.FormSelect.init(profSel);
+    // Buscar horários disponíveis para o profissional/data
+    await atualizarHorariosEdicao();
+    document.getElementById('editHorarioSelect').value = c.horario;
+    M.FormSelect.init(document.getElementById('editHorarioSelect'));
+    M.updateTextFields();
+    // Registrar evento de change após abrir modal
+    const editData = document.getElementById('editData');
+    if (editData) {
+      editData.onchange = atualizarHorariosEdicao;
+    }
+    const modal = M.Modal.getInstance(document.getElementById('modalEditarConsulta'));
+    modal.open();
+// Atualiza horários disponíveis no modal de edição
+async function atualizarHorariosEdicao() {
+  const profId = document.getElementById('editProfissionalSelect').value;
+  const data = document.getElementById('editData').value;
+  const sel = document.getElementById('editHorarioSelect');
+  sel.innerHTML = '<option value="" disabled selected>Selecione a data</option>';
+  if (profId && data) {
+    try {
+      const res = await fetch(`/api/consultas/horarios-disponiveis?profissionalId=${profId}&data=${data}`);
+      const json = await res.json();
+      const horarios = Array.isArray(json) ? json : json.data?.horariosDisponiveis || [];
+      sel.innerHTML = '<option value="" disabled selected>Selecione</option>' + horarios.map(h => `<option value="${h}">${h}</option>`).join('');
+    } catch (e) {
+      sel.innerHTML = '<option value="" disabled selected>Erro ao buscar horários</option>';
+    }
+  }
+  M.FormSelect.init(sel);
+}
+
+// Atualizar horários ao mudar data no modal de edição
+document.addEventListener('DOMContentLoaded', function() {
+  const editData = document.getElementById('editData');
+  if (editData) {
+    editData.addEventListener('change', atualizarHorariosEdicao);
+  }
+});
+  } catch (err) {
+    setStatus(0, 'Falha ao carregar consulta para edição');
+    console.error(err);
+  }
+}
+
+
+// Função para cancelar consulta
+async function cancelarConsulta(id) {
+  if (!confirm('Deseja realmente cancelar esta consulta?')) return;
+  try {
+    const res = await fetch(`/api/consultas/${id}/cancelar`, { method: 'PATCH' });
+    const json = await res.json();
+    setStatus(res.status, json.message || res.statusText);
+    listarConsultas();
+  } catch (err) {
+    setStatus(0, 'Falha ao cancelar consulta');
+    console.error(err);
+  }
+}
     if (!consultas.length) {
       tbody.innerHTML = '<tr><td colspan="7" class="center-align grey-text">Nenhuma consulta</td></tr>';
     }
