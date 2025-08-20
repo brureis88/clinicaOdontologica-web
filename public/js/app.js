@@ -175,11 +175,17 @@ async function listarConsultas() {
     tbody.innerHTML = '';
     consultas.forEach(c => {
       const tr = document.createElement('tr');
+      // Formatar data para DD-MM-AAAA
+      let dataFormatada = c.data;
+      if (typeof c.data === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(c.data)) {
+        const [ano, mes, dia] = c.data.split('-');
+        dataFormatada = `${dia}-${mes}-${ano}`;
+      }
       tr.innerHTML = `
         <td>${c.id}</td>
         <td>${c.paciente?.nome ?? '-'}</td>
         <td>${c.profissional?.nome ?? '-'}</td>
-        <td>${c.data}</td>
+        <td>${dataFormatada}</td>
         <td>${c.horario}</td>
         <td>${c.tipoConsulta}</td>
         <td>${c.status}</td>
