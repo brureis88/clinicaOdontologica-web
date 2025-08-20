@@ -157,7 +157,16 @@ async function agendarConsulta() {
       M.toast({html: 'Consulta agendada!'});
       listarConsultas();
     } else {
-      M.toast({html: 'Erro: ' + (body?.message || 'Falha ao agendar')});
+      let msg = body?.message || body?.error || 'Falha ao agendar';
+      // Se a mensagem indicar erro de data, mostrar mensagem personalizada
+      const msgLower = msg.toLowerCase();
+      if (
+        msgLower.includes('data') &&
+        (msgLower.includes('passad') || msgLower.includes('inválid') || msgLower.includes('anterior'))
+      ) {
+        msg = 'Data inválida ou passada.';
+      }
+      M.toast({html: 'Erro: ' + msg});
     }
   } catch (err) {
     setStatus(0, 'Falha ao agendar consulta');
@@ -205,7 +214,7 @@ async function listarConsultas() {
         const statusTd = tr.querySelector('td:nth-child(7)');
         const status = statusTd ? statusTd.textContent.trim().toLowerCase() : '';
         if (status === 'cancelada') {
-          M.toast({html: 'Não é possível editar uma consulta cancelada', classes: 'red'});
+          M.toast({html: 'Não é possível editar uma consulta cancelada.', classes: 'red'});
           return;
         }
         abrirModalEditarConsulta(el.dataset.id);
