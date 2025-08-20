@@ -194,12 +194,28 @@ async function listarConsultas() {
     tbody.querySelectorAll('.edit-consulta').forEach(el => {
       el.addEventListener('click', (e) => {
         e.preventDefault();
+        // Verifica o status na linha da tabela
+        const tr = el.closest('tr');
+        const statusTd = tr.querySelector('td:nth-child(7)');
+        const status = statusTd ? statusTd.textContent.trim().toLowerCase() : '';
+        if (status === 'cancelada') {
+          M.toast({html: 'Não é possível editar uma consulta cancelada', classes: 'red'});
+          return;
+        }
         abrirModalEditarConsulta(el.dataset.id);
       });
     });
     tbody.querySelectorAll('.cancel-consulta').forEach(el => {
       el.addEventListener('click', (e) => {
         e.preventDefault();
+        // Verifica o status na linha da tabela
+        const tr = el.closest('tr');
+        const statusTd = tr.querySelector('td:nth-child(7)');
+        const status = statusTd ? statusTd.textContent.trim().toLowerCase() : '';
+        if (status === 'cancelada') {
+          M.toast({html: 'Consulta já foi cancelada.', classes: 'orange'});
+          return;
+        }
         cancelarConsulta(el.dataset.id);
       });
     });
