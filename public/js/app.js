@@ -141,7 +141,8 @@ async function listarConsultas() {
   try {
     const res = await fetch('/api/consultas');
     setStatus(res.status, res.statusText);
-    const consultas = await res.json();
+    const json = await res.json();
+    const consultas = json.data || [];
     const tbody = document.getElementById('consultasTbody');
     tbody.innerHTML = '';
     consultas.forEach(c => {
