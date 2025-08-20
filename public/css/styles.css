@@ -1,3 +1,16 @@
-main { min-height: 70vh; }
+#app-wrapper {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+main {
+	flex: 1 0 auto;
+}
+footer.page-footer {
+	margin-top: 0;
+	position: relative;
+	bottom: 0;
+	width: 100%;
+}
 #statusArea { display:flex; align-items:center; gap:12px; }
 #statusChip { font-weight:600; }
