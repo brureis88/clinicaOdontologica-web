@@ -1,10 +1,7 @@
 # Frontend – Clínica Odontológica (estudos)
 
 Frontend simples em **HTML/CSS/JS + Materialize** servido por **Express** na **porta 3001**. 
-Faz proxy para a API (porta **3000**) e consome exatamente os endpoints documentados no Swagger do projeto.
-
-> **Importante – correção aplicada:** o proxy foi configurado para **não duplicar `/api`** na URL de destino.  
-> Assim, uma chamada `GET http://localhost:3001/api/pacientes` é encaminhada para `GET http://localhost:3000/api/pacientes` (sem `/api` duplo).
+Faz proxy para a API (porta **3000**) e consome os endpoints do projeto de API.
 
 ---
 
