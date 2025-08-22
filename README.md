@@ -1,6 +1,6 @@
 # Frontend – Clínica Odontológica (estudos)
 
-Frontend simples em **HTML/CSS/JS + Materialize** servido por **Express** na **porta 3001**. 
+Frontend em **HTML/CSS/JS + Materialize** servido por **Express** na **porta 3001**. 
 Faz proxy para a API (porta **3000**) e consome os endpoints do projeto de API.
 
 ---
