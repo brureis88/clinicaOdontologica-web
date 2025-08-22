@@ -41,11 +41,9 @@ Endpoints usados aqui (conforme README da API):
    ```bash
    # Modo produção
    npm start
-```
+   ```
 
 Acesse: **http://localhost:3001**
-
----
 
 ## Estrutura
 
@@ -58,8 +56,6 @@ clinica-odontologica-web
    ├─ css/styles.css
    └─ js/app.js             # chamadas à API e lógica da página
 ```
-
----
 
 ## Proxy (detalhes)
 
